@@ -7,11 +7,11 @@ class Model {
     private static $_mysqli_db;
     protected static $_idField;
 
-    public function __construct($data) {
+    public function __construct($data = null) {
         $this->set($data);
     }
 
-    public function set(array $data) {
+    public function set($data = null) {
         if(isset($data) && is_array($data)){
             foreach ($data as $property => $value){
                 if(in_array($property, static::$_fields)){
@@ -72,9 +72,9 @@ class Model {
             }
         }
 
-        //die(var_dump($collection));
-
-        return $collection;
+        //if results > 1, return the collection
+        //else, return the single object instance
+        return (isset($collection[1]) ? $collection : $collection[0]);
 
 
     }

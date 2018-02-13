@@ -6,16 +6,15 @@ include 'Action.php';
 include 'Game.php';
 include 'Team.php';
 
+$players = Team::search(array(
+            'TeamName' => 'Minnesota Timberwolves'
+        )
+    )->players();
 
-//$results = Game::search(1);
+foreach($players as $player){
+    echo $player->describe() . "\n";
+}
 
-$player = new Player(array(
-    'PlayerName' => 'Karl Agunday'
-));
-
-$player->save();
-
-echo Player::get(23)->team()->describe();
 
 
 
