@@ -12,4 +12,8 @@ class Game extends Model{
 
     protected static $_idField = 'GameId';
 
+    public static function played($parentId, $parentType){
+
+    }
+
 }

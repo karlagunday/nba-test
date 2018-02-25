@@ -63,20 +63,19 @@ class Model {
 
         $results = self::query($sql);
 
-        $collection  = array();
-
-        if(is_array($results)){
+        if(isset($results[0])){
+            $collection  = array();
             foreach ($results as $result) {
                 $player = new static($result);
                 $collection[] = $player;
             }
+
+            //if results > 1, return the collection
+            //else, return the single object instance
+            return (isset($collection[1]) ? $collection : $collection[0]);
         }
 
-        //if results > 1, return the collection
-        //else, return the single object instance
-        return (isset($collection[1]) ? $collection : $collection[0]);
-
-
+        return null;
     }
 
     public function save() {
@@ -170,7 +169,7 @@ class Model {
 
     public static function get($id) {
         $result = static::search($id);
-        return isset($result[0]) ? $result[0] : null;
+        return isset($result) ? $result : null;
     }
 
     public function describe() {

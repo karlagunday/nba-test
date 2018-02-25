@@ -14,24 +14,15 @@ class Player extends Model{
     }
 
     public function team() {
+        return Action::getCurrentTeam($this->PlayerId);
+    }
 
-        $sql = "
-            SELECT a.TeamId, MAX(g.Date) AS last_game
-              FROM action AS a
-            INNER JOIN game AS g
-              ON a.GameId = g.GameId
-            WHERE a.PlayerId='" . $this->PlayerId . "'
-            GROUP BY a.TeamId
-            ORDER BY last_game DESC
-            LIMIT 0,1
-        ";
+    public function gamesPlayed(){
 
-        $result = $this->query($sql);
-        if(!isset($result[0])){
-            return null;
-        }
+    }
 
-        $teamId = $result[0]['TeamId'];
-        return Team::get($teamId);
+    public function total($stat){
+        $total = Action::getTotal($stat, $this->PlayerId, 'Player');
+        return ($total  == false) ? "Invalid statistic: " . $stat : $total;
     }
 }
