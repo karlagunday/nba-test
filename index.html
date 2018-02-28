@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>NBA Portal</title>
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="css/style.css" media="screen" />
+<script type="text/javascript">
+    $(document).ready(() => {
+        $.ajax({
+            url: 'getAllPlayers.php',
+        }).done((data) => {
+            let playerList = $("list.players");
+            data = $.parseJSON(data);
+            console.log(data);
+            data.forEach( (player) => {
+                $("<player>").html(player.PlayerName)
+                             .appendTo(playerList);
+            });
+        });
+
+    });
+</script>
+<body>
+    <list class="table players">
+
+    </list>
+</body>
+</html>

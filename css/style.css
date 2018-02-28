@@ -1,0 +1,12 @@
+list.table{
+    display: table;
+}
+
+list.table player{
+    display: table-row;
+}
+
+list.table player detail{
+    display: table-cell;
+}
+

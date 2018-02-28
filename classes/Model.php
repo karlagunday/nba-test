@@ -25,12 +25,36 @@ class Model {
         return null;
     }
 
-
-
     public static function add_fields(...$fields) {
         if(is_array($fields)){
             static::$_fields = array_merge(static::$_fields, $fields);
         }
+    }
+
+    public static function getAll($noOfResults = NULL, $startFrom = 0){
+        $sql = "
+            SELECT
+                *
+            FROM
+              " . static::$_tableName . "
+            WHERE 1           
+        ";
+
+        if($noOfResults){
+            $sql .= " LIMIT " . $startFrom . ", " .$noOfResults;
+        }
+
+        $results = self::query($sql);
+
+        $collection = array();
+        if($results[0]){
+            foreach ($results as $result){
+                $collection[] = new static($result);
+            }
+        }
+
+        return $collection;
+
     }
 
     public static function search($search) {

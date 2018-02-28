@@ -70,7 +70,6 @@ class Action extends Model{
         }
 
         $teamId = $result[0]['TeamId'];
-        $team = Team::get($teamId);
         return Team::get($teamId);
 
     }
