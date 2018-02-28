@@ -6,7 +6,7 @@ include 'classes/Action.php';
 include 'classes/Game.php';
 include 'classes/Team.php';
 
-$players = Player::getAll();
+$players = Player::getAll(10);
 
 echo json_encode($players);
 
