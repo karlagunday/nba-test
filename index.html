@@ -5,23 +5,38 @@
     <title>NBA Portal</title>
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
     <link rel="stylesheet" type="text/css" href="css/style.css" media="screen" />
-<script type="text/javascript">
-    $(document).ready(() => {
-        $.ajax({
-            url: 'getAllPlayers.php',
-        }).done((data) => {
-            let playerList = $("list.players");
-            data = $.parseJSON(data);
-            console.log(data);
-            data.forEach( (player) => {
-                $("<player>").html(player.PlayerName)
-                             .appendTo(playerList);
-            });
+    <script type="text/javascript">
+        $(document).ready(() => {
+            update_list(10);
+
+            $("#refine").on("click", () => {
+                update_list($("#items").val());
+            } );
         });
 
-    });
-</script>
+        function update_list(limit = ""){
+            $.ajax({
+                url: 'getAllPlayers.php',
+                method: 'GET',
+                data: {items: limit, start: 0}
+            }).done((data) => {
+                let playerList = $("list.players");
+                playerList.empty();
+                data = $.parseJSON(data);
+                console.log(data);
+                data.forEach( (player) => {
+                    $("<player>").html(player.PlayerName)
+                        .appendTo(playerList);
+                });
+            });
+        }
+    </script>
 <body>
+    <search>
+        <label for="items" class="items">No of Results</label>
+        <input type="text" class="items" id="items">
+        <input type="button" value="Refine" id="refine">
+    </search>
     <list class="table players">
 
     </list>

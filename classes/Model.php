@@ -31,7 +31,7 @@ class Model {
         }
     }
 
-    public static function getAll($noOfResults = NULL, $startFrom = 0){
+    public static function getAll($noOfResults = NULL, $startFrom = NULL){
         $sql = "
             SELECT
                 *
@@ -41,7 +41,7 @@ class Model {
         ";
 
         if($noOfResults){
-            $sql .= " LIMIT " . $startFrom . ", " .$noOfResults;
+            $sql .= " LIMIT " . ($startFrom ?: 0) . ", " .$noOfResults;
         }
 
         $results = self::query($sql);
