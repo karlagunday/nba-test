@@ -5,40 +5,51 @@
     <title>NBA Portal</title>
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
     <link rel="stylesheet" type="text/css" href="css/style.css" media="screen" />
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.5.13/dist/vue.js"></script>
     <script type="text/javascript">
         $(document).ready(() => {
-            update_list(10);
+            let playerList = new Vue( {
+                el: "#playerList",
+                data: {
+                    players: null
+                },
+                created: function (){
+                    this.update();
+                },
+                methods: {
+                    update(limit = 10, start = 0){
+                        $.ajax({
+                            url: 'getAllPlayers.php',
+                            method: 'GET',
+                            data: {items: limit, start: start}
+                        }).done((data) => {
+                            data = $.parseJSON(data);
+                            console.log(data);
+                            this.players = data;
+                        });
+                    }
+                }
+            } );
 
             $("#refine").on("click", () => {
-                update_list($("#items").val());
+                playerList.update($("#items").val(), $("#start").val() - 1);
             } );
-        });
 
-        function update_list(limit = ""){
-            $.ajax({
-                url: 'getAllPlayers.php',
-                method: 'GET',
-                data: {items: limit, start: 0}
-            }).done((data) => {
-                let playerList = $("list.players");
-                playerList.empty();
-                data = $.parseJSON(data);
-                console.log(data);
-                data.forEach( (player) => {
-                    $("<player>").html(player.PlayerName)
-                        .appendTo(playerList);
-                });
-            });
-        }
+        });
     </script>
 <body>
-    <search>
-        <label for="items" class="items">No of Results</label>
-        <input type="text" class="items" id="items">
-        <input type="button" value="Refine" id="refine">
-    </search>
-    <list class="table players">
-
-    </list>
+<search>
+    <label for="items" class="items">No of Results</label>
+    <input type="text" class="items" id="items">
+    <label for="start" class="start">Starting at ID:</label>
+    <input type="text" class="start" id="start">
+    <input type="button" value="Refine" id="refine">
+</search>
+<table id="playerList" class="table">
+    <tr v-for="player in players">
+        <td class="detail">{{player.PlayerId}}</td>
+        <td class="detail">{{player.PlayerName}}</td>
+    </tr>
+</table>
 </body>
 </html>

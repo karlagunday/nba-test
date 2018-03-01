@@ -40,10 +40,10 @@ class Model {
             WHERE 1           
         ";
 
-        if($noOfResults){
-            $sql .= " LIMIT " . ($startFrom ?: 0) . ", " .$noOfResults;
+        if(isset($noOfResults)){
+            $sql .= " LIMIT " . ($startFrom > 0 ? $startFrom : 0) . ", " .$noOfResults;
         }
-
+        //die(var_dump($sql));
         $results = self::query($sql);
 
         $collection = array();
