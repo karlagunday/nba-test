@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script src="include/template.js"></script>
+    <style type="text/css">
+        body, select, input, textarea {
+            font: normal 16px Helvetica, Arial;
+        }
+        h1:first-child {
+            margin-top: 0;
+        }
+        section {
+            padding: 20px;
+        }
+        section.filter {
+            border: solid 1px #ccc;
+            display: inline-block;
+            margin-bottom: 20px;
+        }
+        section h1 {
+            font-size: 1.2em;
+            margin: 0 5px 0 0;
+            display: inline-block;
+        }
+        section.teams {
+            background: #efefef;
+        }
+        article.team {
+            width: 250px;
+            padding: 25px;
+            margin-right: 20px;
+            margin-bottom: 20px;
+            background: #fff;
+            float: left;
+        }
+        article.team h1 {
+            margin: 0;
+        }
+        .players {
+            list-style: none;
+            padding: 0px;
+        }
+        .players li {
+            margin: 5px 0;
+            padding: 10px 0;
+        }
+        select, input, textarea {
+            padding: 5px;
+        }
+        section.teams:after {
+            content: "";
+            display: table;
+            clear: both;
+        }
+        .player h3 {
+            font-size: 16px;
+        }
+    </style>
+    <script type="text/template" id="template-team">
+        <article class="team">
+            <h1 class="team-name"></h1>
+            <ul class="players">
+                <li class="player">
+                    <h3 class="player-name"></h3>
+                </li>
+            </ul>
+        </article>
+    </script>
+    <script type="text/javascript">
+        $(document).ready(function(e) {
+
+            var teamData = {
+                '1': {
+                    team: 1,
+                    name: 'Portland Trail Blazers',
+                    players: [
+                        {'player-name': 'Portland player 1'},
+                        {'player-name': 'Portland player 2'},
+                        {'player-name': 'Portland player 3'},
+                    ]
+                },
+                '2': {
+                    team: 2,
+                    name: 'Los Angeles Lakers',
+                    players: [
+                        {'player-name': 'Los Angeles player 1'},
+                        {'player-name': 'Los Angeles player 2'},
+                        {'player-name': 'Los Angeles player 3'},
+                    ]
+                },
+                '3': {
+                    team: 3,
+                    name: 'Golden State Warriors',
+                    players: [
+                        {'player-name': 'Golden State player 1'},
+                        {'player-name': 'Golden State player 2'},
+                        {'player-name': 'Golden State player 3'},
+                    ]
+                },
+                '4': {
+                    team: 4,
+                    name: 'Dallas Mavericks',
+                    players: [
+                        {'player-name': 'Dallas player 1'},
+                        {'player-name': 'Dallas player 2'},
+                        {'player-name': 'Dallas player 3'},
+                    ]
+                },
+                '5': {
+                    team: 5,
+                    name: 'Houston Rockets',
+                    players: [
+                        {'player-name': 'Houston player 1'},
+                        {'player-name': 'Houston player 2'},
+                        {'player-name': 'Houston player 3'},
+                    ]
+                }
+            };
+
+            $("#lookup").on('click', function(){
+                var teamId = $("#team-name option:selected").val();
+                var workspace = $('.teams');
+                var data = {
+                    'team-name': teamData[teamId].name,
+                };
+                var players =  teamData[teamId].players;
+                new Template('template-team').
+                assign(data).
+                loop('player', players).
+                assemble().
+                appendTo(workspace);
+
+            });
+
+        });
+
+
+    </script>
+</head>
+<body>
+<section class="filter">
+    <form>
+        <h1>Lookup Team</h1>
+        <select id="team-name">
+            <option value="1">Portland Trail Blazers</option>
+            <option value="2">Los Angeles Lakers</option>
+            <option value="3">Golden State Warriors</option>
+            <option value="4">Dallas Mavericks</option>
+            <option value="5">Houston Rockets</option>
+        </select>
+        <input type="button" value="Lookup" id="lookup"/>
+    </form>
+</section>
+<section class="teams">
+
+</section>
+</body>
+</html>
