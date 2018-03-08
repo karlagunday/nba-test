@@ -44,8 +44,19 @@
             padding: 0px;
         }
         .players li {
+            width: 100%;
             margin: 5px 0;
-            padding: 10px 0;
+            padding: 0 0 10px;
+            position: relative;
+        }
+        .player .points {
+            width: 50px;
+            font-size: 22px;
+            font-weight: bold;
+            text-align: right;
+            position: absolute;
+            top: 0;
+            right: 0;
         }
         select, input, textarea {
             padding: 5px;
@@ -57,84 +68,161 @@
         }
         .player h3 {
             font-size: 16px;
+            margin: 0;
+        }
+        .player .position {
+            font-size: 0.8em;
         }
     </style>
     <script type="text/template" id="template-team">
         <article class="team">
             <h1 class="team-name"></h1>
             <ul class="players">
-                <li class="player">
-                    <h3 class="player-name"></h3>
-                </li>
             </ul>
         </article>
     </script>
+    <script type="text/template" id="template-player">
+        <li class="player">
+            <aside class="points"></aside>
+            <h3 class="player-name"></h3>
+            <aside class="position"></aside>
+        </li>
+    </script>
     <script type="text/javascript">
+
+
+        var teamData = {
+            '1': {
+                name: 'Portland Trail Blazers',
+                players: [
+                    {'player-name': 'Portland player 1', points: 1881, position: 'Small Forward'},
+                    {'player-name': 'Portland player 2', points: 871, position: 'Point Guard'},
+                    {'player-name': 'Portland player 3', points: 188, position: 'Power Forward'},
+                ],
+            },
+            '2': {
+                name: 'Los Angeles Lakers',
+                players: [
+                    {'player-name': 'Los Angeles player 1', points: 1881, position: 'Small Forward'},
+                    {'player-name': 'Los Angeles player 2', points: 188, position: 'Small Forward'},
+                    {'player-name': 'Los Angeles player 3', points: 752, position: 'Point Guard'},
+                ]
+            },
+            '3': {
+                name: 'Golden State Warriors',
+                players: [
+                    {'player-name': 'Golden State player 1', points: 81, position: 'Small Forward'},
+                    {'player-name': 'Golden State player 2', points: 130, position: 'Small Forward'},
+                    {'player-name': 'Golden State player 3', points: 11, position: 'Point Guard'},
+                ]
+            },
+            '4': {
+                name: 'Dallas Mavericks',
+                players: [
+                    {'player-name': 'Dallas player 1', points: 121, position: 'Small Forward'},
+                    {'player-name': 'Dallas player 2', points: 1851, position: 'Power Forward'},
+                    {'player-name': 'Dallas player 3', points: 81, position: 'Small Forward'},
+                ]
+            },
+            '5': {
+                name: 'Houston Rockets',
+                players: [
+                    {'player-name': 'Houston player 1', points: 1881, position: 'Point Guard'},
+                    {'player-name': 'Houston player 2', points: 1881, position: 'Power Forward'},
+                    {'player-name': 'Houston player 3', points: 1881, position: 'Small Forward'},
+                ]
+            }
+        };
+
+        function Workspace($el) {
+            this.$el = $el;
+            return this;
+        }
+
+        $.extend(Workspace.prototype, {
+            append: function(content){
+                this.$el.append(content.dom());
+            }
+        });
+
+        function Team(name, roster) {
+            this.name = name;
+            this.roster = roster;
+            this.$el = this.assemble();
+            $.each(this.roster, (index, playerData) => {
+                var player = new Player(playerData['player-name'], playerData.position, playerData.points);
+                this.addPlayer(player);
+            });
+        }
+
+        $.extend(Team.prototype, {
+            assemble: function() {
+                return new Template('template-team').
+                    assign({
+                        'team-name': this.name,
+                    }).
+                    assemble();
+            },
+            appendTo: function (workspace) {
+                workspace.append(this);
+            },
+            dom: function() {
+                return this.$el;
+            },
+            addPlayer: function (player) {
+                console.log(player);
+                player.dom().appendTo(this.$el.find('.players'));
+                //this.$el.find('players').appendTo(player.dom());
+            }
+
+        });
+
+        function Player(name, position, points){
+            this.name = name;
+            this.position = position;
+            this.points = points;
+            this.$el = this.assemble();
+        }
+
+        $.extend(Player.prototype, {
+            assemble: function() {
+                return new Template('template-player').
+                assign({
+                    'player-name': this.name,
+                    'position': this.position,
+                    'points': this.points
+                }).
+                assemble();
+            },
+            addToTeam: function(team) {
+                team.addPlayer(this);
+            },
+            dom: function() {
+                return this.$el;
+            }
+
+        });
+/*
+        function addPlayerToTeam(name, position, points) {
+            var team = $('.team');
+            var $player = new Template('template-player').
+                assign({
+                    'player-name': name,
+                    'position': position,
+                    'points': points
+                }).
+                assemble();
+            team.find('.players').appendTo($player);
+        }*/
+
         $(document).ready(function(e) {
-
-            var teamData = {
-                '1': {
-                    team: 1,
-                    name: 'Portland Trail Blazers',
-                    players: [
-                        {'player-name': 'Portland player 1'},
-                        {'player-name': 'Portland player 2'},
-                        {'player-name': 'Portland player 3'},
-                    ]
-                },
-                '2': {
-                    team: 2,
-                    name: 'Los Angeles Lakers',
-                    players: [
-                        {'player-name': 'Los Angeles player 1'},
-                        {'player-name': 'Los Angeles player 2'},
-                        {'player-name': 'Los Angeles player 3'},
-                    ]
-                },
-                '3': {
-                    team: 3,
-                    name: 'Golden State Warriors',
-                    players: [
-                        {'player-name': 'Golden State player 1'},
-                        {'player-name': 'Golden State player 2'},
-                        {'player-name': 'Golden State player 3'},
-                    ]
-                },
-                '4': {
-                    team: 4,
-                    name: 'Dallas Mavericks',
-                    players: [
-                        {'player-name': 'Dallas player 1'},
-                        {'player-name': 'Dallas player 2'},
-                        {'player-name': 'Dallas player 3'},
-                    ]
-                },
-                '5': {
-                    team: 5,
-                    name: 'Houston Rockets',
-                    players: [
-                        {'player-name': 'Houston player 1'},
-                        {'player-name': 'Houston player 2'},
-                        {'player-name': 'Houston player 3'},
-                    ]
-                }
-            };
-
             $("#lookup").on('click', function(){
                 var teamId = $("#team-name option:selected").val();
-                var workspace = $('.teams');
-                var data = {
-                    'team-name': teamData[teamId].name,
-                };
-                var players =  teamData[teamId].players;
-                new Template('template-team').
-                assign(data).
-                loop('player', players).
-                assemble().
-                appendTo(workspace);
-
+                var workspace = new Workspace($('.teams'));
+                //var player = new Player('Karl', 'Guard', 999);
+                var team = new Team(teamData[teamId].name, teamData[teamId].players);
+                team.appendTo(workspace);
             });
-
         });
 
 
@@ -151,7 +239,7 @@
             <option value="4">Dallas Mavericks</option>
             <option value="5">Houston Rockets</option>
         </select>
-        <input type="button" value="Lookup" id="lookup"/>
+        <input type="button" value="Lookp" id="lookup"/>
     </form>
 </section>
 <section class="teams">
