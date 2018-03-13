@@ -5,6 +5,7 @@
     <title>Title</title>
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
     <script src="include/template.js"></script>
+    <script src="include/app.js"></script>
     <style type="text/css">
         body, select, input, textarea {
             font: normal 16px Helvetica, Arial;
@@ -134,87 +135,6 @@
             }
         };
 
-        function Workspace($el) {
-            this.$el = $el;
-            return this;
-        }
-
-        $.extend(Workspace.prototype, {
-            append: function(content){
-                this.$el.append(content.dom());
-            }
-        });
-
-        function Team(name, roster) {
-            this.name = name;
-            this.roster = roster;
-            this.$el = this.assemble();
-            $.each(this.roster, (index, playerData) => {
-                var player = new Player(playerData['player-name'], playerData.position, playerData.points);
-                this.addPlayer(player);
-            });
-        }
-
-        $.extend(Team.prototype, {
-            assemble: function() {
-                return new Template('template-team').
-                    assign({
-                        'team-name': this.name,
-                    }).
-                    assemble();
-            },
-            appendTo: function (workspace) {
-                workspace.append(this);
-            },
-            dom: function() {
-                return this.$el;
-            },
-            addPlayer: function (player) {
-                console.log(player);
-                player.dom().appendTo(this.$el.find('.players'));
-                //this.$el.find('players').appendTo(player.dom());
-            }
-
-        });
-
-        function Player(name, position, points){
-            this.name = name;
-            this.position = position;
-            this.points = points;
-            this.$el = this.assemble();
-        }
-
-        $.extend(Player.prototype, {
-            assemble: function() {
-                return new Template('template-player').
-                assign({
-                    'player-name': this.name,
-                    'position': this.position,
-                    'points': this.points
-                }).
-                assemble();
-            },
-            addToTeam: function(team) {
-                team.addPlayer(this);
-            },
-            dom: function() {
-                return this.$el;
-            }
-
-        });
-/*
-        function addPlayerToTeam(name, position, points) {
-            var team = $('.team');
-            var $player = new Template('template-player').
-                assign({
-                    'player-name': name,
-                    'position': position,
-                    'points': points
-                }).
-                assemble();
-            team.find('.players').appendTo($player);
-        }*/
-
         $(document).ready(function(e) {
             $("#lookup").on('click', function(){
                 var teamId = $("#team-name option:selected").val();
@@ -239,7 +159,7 @@
             <option value="4">Dallas Mavericks</option>
             <option value="5">Houston Rockets</option>
         </select>
-        <input type="button" value="Lookp" id="lookup"/>
+        <input type="button" value="Lookup" id="lookup"/>
     </form>
 </section>
 <section class="teams">
