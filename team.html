@@ -139,7 +139,6 @@
             $("#lookup").on('click', function(){
                 var teamId = $("#team-name option:selected").val();
                 var workspace = new Workspace($('.teams'));
-                //var player = new Player('Karl', 'Guard', 999);
                 var team = new Team(teamData[teamId].name, teamData[teamId].players);
                 team.appendTo(workspace);
             });

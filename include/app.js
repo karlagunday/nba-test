@@ -12,12 +12,19 @@ $.extend(Workspace.prototype, {
     }
 });
 
-function Team(name, roster) {
+function Team(name, rosterData) {
     this.name = name;
-    this.roster = roster;
     this.template = new Template('template-team');
     this.$el = this.assemble();
-    this.buildRoster();
+
+    // build the roster
+    this.roster = [];
+    $.each(rosterData, (index, playerData) => {
+        var player = new Player(playerData['player-name'], playerData.position, playerData.points);
+        this.roster.push(player);
+    });
+
+    this.assembleRoster();
 }
 
 $.extend(Team.prototype, {
@@ -36,12 +43,12 @@ $.extend(Team.prototype, {
         return this.$el;
     },
     addPlayer: function (player) {
-        player.dom().appendTo(this.dom().find('.players'));
+        this.roster.push(player);
+        this.buildRoster();
     },
-    buildRoster: function() {
-        $.each(this.roster, (index, playerData) => {
-            var player = new Player(playerData['player-name'], playerData.position, playerData.points);
-            this.addPlayer(player);
+    assembleRoster: function() {
+        $.each(this.roster, (index, player) => {
+            player.dom().appendTo(this.template.retrieve('players'));
         });
     }
 
