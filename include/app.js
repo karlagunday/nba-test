@@ -44,11 +44,13 @@ $.extend(Team.prototype, {
     },
     addPlayer: function (player) {
         this.roster.push(player);
-        this.buildRoster();
+        this.assembleRoster();
     },
     assembleRoster: function() {
+        var $players = this.template.retrieve('players');
+        $players.empty();
         $.each(this.roster, (index, player) => {
-            player.dom().appendTo(this.template.retrieve('players'));
+            player.dom().appendTo($players);
         });
     }
 
