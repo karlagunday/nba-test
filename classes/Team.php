@@ -1,4 +1,5 @@
 <?php
+require_once 'classes/Model.php';
 
 class Team extends Model{
     protected static $_tableName = 'team';

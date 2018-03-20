@@ -1,5 +1,7 @@
 <?php
 
+require_once 'classes/Model.php';
+
 class Action extends Model{
     protected static $_tableName = 'action';
     protected static $_fields = array(

@@ -1,5 +1,6 @@
 <?php
 
+require_once 'classes/Model.php';
 
 class Player extends Model{
     protected static $_tableName = 'player';

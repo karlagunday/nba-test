@@ -5,7 +5,8 @@
     <title>Title</title>
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
     <script src="include/template.js"></script>
-    <script src="include/app.js"></script>
+    <script src="ui/app.js"></script>
+    <script src="js/Core.js"></script>
     <style type="text/css">
         body, select, input, textarea {
             font: normal 16px Helvetica, Arial;
@@ -142,6 +143,13 @@
                 var team = new Team(teamData[teamId].name, teamData[teamId].players);
                 team.appendTo(workspace);
             });
+
+            var teamController = new Core('team');
+            teamController.execute('summary', function(result) {
+                $.each(result, (index, teamName) => {
+                    $("#team-name").append("<option value=" + index + ">" + teamName + "</option>");
+                });
+            } );
         });
 
 
@@ -152,11 +160,7 @@
     <form>
         <h1>Lookup Team</h1>
         <select id="team-name">
-            <option value="1">Portland Trail Blazers</option>
-            <option value="2">Los Angeles Lakers</option>
-            <option value="3">Golden State Warriors</option>
-            <option value="4">Dallas Mavericks</option>
-            <option value="5">Houston Rockets</option>
+
         </select>
         <input type="button" value="Lookup" id="lookup"/>
     </form>

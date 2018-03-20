@@ -1,4 +1,7 @@
 <?php
+
+require_once 'classes/Model.php';
+
 class Game extends Model{
     protected static $_tableName = 'game';
     protected static $_fields = array(
