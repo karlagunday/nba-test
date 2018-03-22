@@ -1,12 +1,45 @@
 function Core (controller) {
     this.controller = controller;
-    this.apiURL = '/player-test/';
+    this.fields = [];
 }
 
 $.extend(Core.prototype, {
+
+    retrieve: function(id, callback) {
+        var route = this.controller + '/' + id;
+        this.execute(route, function(record) {
+            $.each(record, function(key, value) {
+                this[key] = value;
+            }.bind(this));
+            callback(record);
+        }.bind(this));
+    },
+
+    retrieve_all: function(callback) {
+        var route = this.controller + '/';
+        return this.execute(route, callback);
+    },
+
+    update: function(id, data, callback) {
+        var route = this.controller + '/' + id;
+        return this.execute(route, data, callback);
+    },
+
+    insert: function(data, callback) {
+        var route = this.controller + '/';
+        return this.execute(route, data, callback);
+    },
+
+    set: function (data) {
+        $.each(this.fields, function(key, property) {
+            this[property] = data.property;
+        }.bind(this));
+
+    },
+
     /**
      * Execute a call to the api & pass returned data to a callback
-     * @param action the action to execute on the api
+     * @param route the route to execute on the api
      * @param data an optional object of key => value pairs to pass to the api as POST data
      * @param callback an optional function to execute when the API call returns
      * @example
@@ -18,7 +51,8 @@ $.extend(Core.prototype, {
      * });
      * this.execute('delete', {name: 'Peter'});
      */
-    execute: function (action, data, callback) {
+    execute: function (route, data, callback) {
+        this.apiURL = '/player-test/';
         if (!this.controller) {
             throw new Error ('No controller set');
         }
@@ -30,21 +64,19 @@ $.extend(Core.prototype, {
             data = {};
         }
 
-        // build route URL
-        var routeURL = this.apiURL + this.controller + '/' + action + '/';
-
         // execute the call & pass returned data to the specified callback
         $.ajax({
-            url: routeURL,
+            url: this.apiURL + route,
             method: data ? 'GET' : 'POST',
             data: data,
         }).done((data) => {
             if (!callback) {
-                return;
-            }
+            return;
+        }
+        if (typeof data == 'string') {
             data = $.parseJSON(data);
-            callback(data);
-        });
+        }
+        callback(data);
+    });
     }
 });
-

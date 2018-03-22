@@ -4,14 +4,12 @@ require_once 'classes/controllers/Controller.php';
 require_once 'classes/Team.php';
 
 class TeamController extends Controller {
-    public function summary() {
-        $results = Team::getAll();
+    public function get_all() {
+        return Team::get_all();
+    }
 
-        $teams = array();
-        foreach ($results  as $team){
-            $teams[$team->TeamId] = $team->TeamName;
-        }
-
-        return $teams;
+    public function get($id) {
+        $result = Team::get($id);
+        return isset($result) ? $result : null;
     }
 }

@@ -31,7 +31,7 @@ class Model {
         }
     }
 
-    public static function getAll($noOfResults = NULL, $startFrom = NULL){
+    public static function get_all($noOfResults = NULL, $startFrom = NULL){
         $sql = "
             SELECT
                 *

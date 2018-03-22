@@ -9,7 +9,7 @@ include 'classes/Team.php';
 $items = isset($_REQUEST['items']) ? $_REQUEST['items'] : NULL;
 $start = isset($_REQUEST['start']) ? $_REQUEST['start'] : NULL;
 
-$players = Player::getAll($items, $start);
+$players = Player::get_all($items, $start);
 
 echo json_encode($players);
 
