@@ -11,7 +11,7 @@ Team.prototype.constructor = Team;
 $.extend(Team.prototype, {
     // assigns the data to the template
     assemble: function(result) {
-        console.log(result);
+        console.log(result);  
         this.$el =  this.template.
         assign({
             'team-name': result.TeamName,
