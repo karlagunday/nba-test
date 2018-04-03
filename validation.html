@@ -46,13 +46,16 @@
             -moz-box-sizing: border-box;
             box-sizing: border-box;
         }
+        .error-show {
+            display: block !important;
+        }
 
         input:invalid {
-            box-shadow: 0 0 5px 1px red;
+            /*box-shadow: 0 0 5px 1px red;*/
         }
 
         input:focus:invalid {
-            outline: none;
+            /*outline: none;*/
         }
         aside {
             display: none;
@@ -99,8 +102,8 @@
     <textarea id="t3" name="msg" maxlength="140" rows="5"></textarea>
 
 
-    <button>Submit</button>
-
+    <input type="button" value="Test" />
+    <aside id="form-error" class="error">Validation errors</aside>
 </form>
 </body>
 </html>
